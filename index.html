@@ -31,8 +31,9 @@
 
         /* Estilos base e classes específicas */
         body {
-            background-color: #121212; /* Cor de fundo fixa (primary-dark) */
-            color: #F0F0F0; /* Cor do texto fixa (light-text) */
+            /* CORREÇÃO CRÍTICA: Usar !important para garantir que o fundo escuro é aplicado imediatamente */
+            background-color: #121212 !important; 
+            color: #F0F0F0 !important;
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
             cursor: none; /* Esconde o cursor padrão para usar o cursor personalizado */
@@ -67,7 +68,7 @@
             margin-bottom: 1rem;
         }
 
-        /* NOVO: Estilo para o texto "3D" para parecer um ícone */
+        /* Estilo para o texto "3D" para parecer um ícone */
         .icon-text-3d {
             color: #7B66FF; /* Cor do stroke dos icons Lucide */
             font-size: 3rem; /* Tamanho igual ao dos icons */
@@ -100,7 +101,26 @@
             pointer-events: none;
             box-shadow: 0 0 50px rgba(123, 102, 255, 0.1);
         }
-        
+
+        #radar-arc {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 800px; 
+            height: 800px;
+            background: conic-gradient(
+                transparent 0deg,
+                rgba(123, 102, 255, 0.8) 0deg, 
+                rgba(123, 102, 255, 0.2) 10deg, 
+                transparent 25deg,
+                transparent 360deg
+            );
+            border-radius: 50%;
+            transform-origin: center center;
+            animation: arc-scan 8s infinite linear; 
+        }
+
         /* 2. Efeito de Glow do Cursor (CUSTOM CURSOR) */
         #cursor-glow, #cursor-dot {
             pointer-events: none;
@@ -201,7 +221,7 @@
             mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0) 100%);
         }
         
-        /* CORREÇÃO CRÍTICA 1: Usar width: fit-content para que a largura seja medida corretamente */
+        /* Usar width: fit-content para que a largura seja medida corretamente */
         .scrolling-text-track {
             display: flex;
             white-space: nowrap; 
@@ -215,8 +235,6 @@
             display: flex;
             align-items: center;
             padding-right: 0; 
-            /* CORREÇÃO CRÍTICA 2: Adicionar uma margem final a ESTE grupo, de forma que o conteúdo
-               não se encoste e a transição do loop seja perfeita. */
             margin-right: 0; 
         }
         
@@ -242,8 +260,13 @@
             margin: 0 -1rem; 
             display: inline-block;
         }
-
-        /* A animação keyframes "scroll-text" será removida/ignorada, pois será gerida por JS */
+        
+        /* Ocultar Radar no Mobile */
+        @media (max-width: 640px) {
+            #radar-bg {
+                display: none;
+            }
+        }
     </style>
 </head>
 
@@ -647,29 +670,45 @@
         const defaultGlowStyle = 'radial-gradient(circle, rgba(123, 102, 255, 0.10) 0%, rgba(18, 18, 18, 0) 75%)';
         const hoverGlowStyle = 'radial-gradient(circle, rgba(123, 102, 255, 0.25) 0%, rgba(18, 18, 18, 0) 70%)';
 
-        document.addEventListener('mousemove', (e) => {
-            if (cursorGlow) {
-                cursorGlow.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
-            }
-            if (cursorDot) {
-                cursorDot.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
-            }
-        });
+        // Deteta se é um dispositivo touch ou ecrã pequeno (mobile)
+        function isTouchDeviceOrSmallScreen() {
+            const hasTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+            const isSmallScreen = window.matchMedia("(max-width: 640px)").matches;
+            return hasTouch || isSmallScreen;
+        }
 
-        document.querySelectorAll('a, button, .portfolio-item, .process-step, .insights-card').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursorGlow.style.width = '450px'; 
-                cursorGlow.style.height = '450px';
-                cursorGlow.style.background = hoverGlowStyle;
-                cursorDot.style.opacity = 0; 
+        // Funções do cursor só funcionam se não for touch/mobile
+        if (!isTouchDeviceOrSmallScreen()) {
+            document.addEventListener('mousemove', (e) => {
+                if (cursorGlow) {
+                    cursorGlow.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+                }
+                if (cursorDot) {
+                    cursorDot.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+                }
             });
-            el.addEventListener('mouseleave', () => {
-                cursorGlow.style.width = '400px'; 
-                cursorGlow.style.height = '400px';
-                cursorGlow.style.background = defaultGlowStyle;
-                cursorDot.style.opacity = 1; 
+
+            document.querySelectorAll('a, button, .portfolio-item, .process-step, .insights-card').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursorGlow.style.width = '450px'; 
+                    cursorGlow.style.height = '450px';
+                    cursorGlow.style.background = hoverGlowStyle;
+                    cursorDot.style.opacity = 0; 
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursorGlow.style.width = '400px'; 
+                    cursorGlow.style.height = '400px';
+                    cursorGlow.style.background = defaultGlowStyle;
+                    cursorDot.style.opacity = 1; 
+                });
             });
-        });
+        } else {
+            // Se for touch/mobile, esconde os elementos do cursor
+            if (cursorGlow) cursorGlow.style.display = 'none';
+            if (cursorDot) cursorDot.style.display = 'none';
+            // Também remove o estilo 'cursor: none' do body
+            document.body.style.cursor = 'auto';
+        }
 
         // 5. CORREÇÃO CRÍTICA: Carrossel de Texto em Loop Perfeito via JavaScript
         const track = document.getElementById('scrolling-text-track');
