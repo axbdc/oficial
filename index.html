@@ -102,25 +102,6 @@
             box-shadow: 0 0 50px rgba(123, 102, 255, 0.1);
         }
 
-        #radar-arc {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 800px; 
-            height: 800px;
-            background: conic-gradient(
-                transparent 0deg,
-                rgba(123, 102, 255, 0.8) 0deg, 
-                rgba(123, 102, 255, 0.2) 10deg, 
-                transparent 25deg,
-                transparent 360deg
-            );
-            border-radius: 50%;
-            transform-origin: center center;
-            animation: arc-scan 8s infinite linear; 
-        }
-
         /* 2. Efeito de Glow do Cursor (CUSTOM CURSOR) */
         #cursor-glow, #cursor-dot {
             pointer-events: none;
