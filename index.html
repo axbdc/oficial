@@ -102,6 +102,7 @@
             box-shadow: 0 0 50px rgba(123, 102, 255, 0.1);
         }
 
+
         /* 2. Efeito de Glow do Cursor (CUSTOM CURSOR) */
         #cursor-glow, #cursor-dot {
             pointer-events: none;
@@ -308,10 +309,12 @@
         </div>
 
         <div class="max-w-4xl mx-auto relative z-10">
-            <h1 class="text-5xl sm:text-7xl font-extrabold leading-tight mb-6">
+            <!-- CORREÇÃO: Reduzir para text-4xl no mobile (padrão) para evitar corte -->
+            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
                 Criamos <span class="text-accent-color">Experiências Visuais</span> que Definem o Futuro.
             </h1>
-            <p class="text-xl text-subtle-text mb-12 max-w-2xl mx-auto">
+            <!-- CORREÇÃO: Reduzir para text-lg no mobile (padrão) para melhor quebra de linha -->
+            <p class="text-lg sm:text-xl text-subtle-text mb-12 max-w-2xl mx-auto">
                 Design para <span class="text-white font-semibold">Social Media</span>, <span class="text-white font-semibold">3D</span> e <span class="text-white font-semibold">Realidade Aumentada (AR)</span> que eleva a sua marca.
             </p>
             <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-20">
