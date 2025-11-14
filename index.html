@@ -100,8 +100,24 @@
             overflow: hidden;
             pointer-events: none;
             box-shadow: 0 0 50px rgba(123, 102, 255, 0.1);
+            transition: all 0.5s ease; /* Adicionado transição para responsividade suave */
         }
 
+       
+
+        /* Correção CRÍTICA: Manter o radar no mobile, mas com tamanho reduzido */
+        @media (max-width: 640px) {
+            #radar-bg {
+                /* Reduz o tamanho no mobile para que não corte o viewport */
+                width: 450px; 
+                height: 450px;
+                opacity: 0.4; /* Reduz a opacidade para ser mais subtil */
+            }
+            #radar-arc {
+                width: 450px;
+                height: 450px;
+            }
+        }
 
         /* 2. Efeito de Glow do Cursor (CUSTOM CURSOR) */
         #cursor-glow, #cursor-dot {
@@ -243,12 +259,6 @@
             display: inline-block;
         }
         
-        /* Ocultar Radar no Mobile */
-        @media (max-width: 640px) {
-            #radar-bg {
-                display: none;
-            }
-        }
     </style>
 </head>
 
@@ -309,8 +319,8 @@
         </div>
 
         <div class="max-w-4xl mx-auto relative z-10">
-            <!-- CORREÇÃO: Reduzir para text-4xl no mobile (padrão) para evitar corte -->
-            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
+            <!-- CORREÇÃO CRÍTICA: Reduzir MUITO para evitar corte no mobile -->
+            <h1 class="text-3xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
                 Criamos <span class="text-accent-color">Experiências Visuais</span> que Definem o Futuro.
             </h1>
             <!-- CORREÇÃO: Reduzir para text-lg no mobile (padrão) para melhor quebra de linha -->
