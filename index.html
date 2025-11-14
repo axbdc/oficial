@@ -103,19 +103,36 @@
             transition: all 0.5s ease; /* Adicionado transição para responsividade suave */
         }
 
-       
+        #radar-arc {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 800px; 
+            height: 800px;
+            background: conic-gradient(
+                transparent 0deg,
+                rgba(123, 102, 255, 0.8) 0deg, 
+                rgba(123, 102, 255, 0.2) 10deg, 
+                transparent 25deg,
+                transparent 360deg
+            );
+            border-radius: 50%;
+            transform-origin: center center;
+            animation: arc-scan 8s infinite linear; 
+        }
 
-        /* Correção CRÍTICA: Manter o radar no mobile, mas com tamanho reduzido */
+        /* Correção CRÍTICA: Manter o radar no mobile, mas com tamanho REDUZIDO (para caber) */
         @media (max-width: 640px) {
             #radar-bg {
-                /* Reduz o tamanho no mobile para que não corte o viewport */
-                width: 450px; 
-                height: 450px;
-                opacity: 0.4; /* Reduz a opacidade para ser mais subtil */
+                /* Reduz o tamanho para que não corte o viewport */
+                width: 300px; 
+                height: 300px;
+                opacity: 0.4; 
             }
             #radar-arc {
-                width: 450px;
-                height: 450px;
+                width: 300px;
+                height: 300px;
             }
         }
 
@@ -319,23 +336,27 @@
         </div>
 
         <div class="max-w-4xl mx-auto relative z-10">
-            <!-- CORREÇÃO CRÍTICA: Reduzir MUITO para evitar corte no mobile -->
-            <h1 class="text-3xl sm:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
+            <!-- CORREÇÃO: Reduzir MUITO no mobile (text-3xl) e aumentar suavemente no sm (text-5xl) para caber na maioria dos ecrãs -->
+            <h1 class="text-3xl sm:text-5xl lg:text-7xl font-extrabold leading-tight mb-6">
                 Criamos <span class="text-accent-color">Experiências Visuais</span> que Definem o Futuro.
             </h1>
             <!-- CORREÇÃO: Reduzir para text-lg no mobile (padrão) para melhor quebra de linha -->
             <p class="text-lg sm:text-xl text-subtle-text mb-12 max-w-2xl mx-auto">
                 Design para <span class="text-white font-semibold">Social Media</span>, <span class="text-white font-semibold">3D</span> e <span class="text-white font-semibold">Realidade Aumentada (AR)</span> que eleva a sua marca.
             </p>
-            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-20">
+            
+            <!-- CORREÇÃO CRÍTICA: Ajustar classes para que o layout de botões funcione perfeitamente no PC e no Mobile -->
+            <div class="flex flex-col items-center sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-20">
                 <!-- CTA Primário (Glow Button) -->
-                <a href="#services" class="bg-accent-color hover:bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105 cta-glow-effect cursor-none">
+                <a href="#services" class="bg-accent-color hover:bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105 cta-glow-effect w-full sm:w-auto cursor-none">
                     <span>Ver Serviços</span>
                 </a>
-                <a href="#portfolio" class="bg-transparent border-2 border-subtle-text text-light-text hover:border-accent-color hover:text-accent-color font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 cursor-none">
+                <!-- CORREÇÃO: Botão secundário sem w-full no desktop, mas com flexibilidade no mobile. mx-auto garante centralização no mobile -->
+                <a href="#portfolio" class="bg-transparent border-2 border-subtle-text text-light-text hover:border-accent-color hover:text-accent-color font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 w-full sm:w-auto cursor-none">
                     Portfólio Recente
                 </a>
             </div>
+            <!-- FIM DA CORREÇÃO DE BOTÕES -->
 
             <!-- Carrossel de Texto Contínuo -->
             <div class="scrolling-text-container bg-card-bg rounded-xl border border-gray-700 shadow-2xl overflow-hidden">
