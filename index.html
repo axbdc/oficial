@@ -31,8 +31,8 @@
 
         /* Estilos base e classes específicas */
         body {
-            background-color: #121212;
-            color: #F0F0F0;
+            background-color: #121212; /* Cor de fundo fixa (primary-dark) */
+            color: #F0F0F0; /* Cor do texto fixa (light-text) */
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
             cursor: none; /* Esconde o cursor padrão para usar o cursor personalizado */
@@ -83,7 +83,6 @@
             width: 800px; 
             height: 800px;
             border-radius: 50%;
-            /* Círculo base para a animação */
             border: 1px solid rgba(123, 102, 255, 0.2); 
             transform: translate(-50%, -50%);
             z-index: -1; 
@@ -97,19 +96,18 @@
             position: absolute;
             top: 0;
             left: 50%;
-            width: 800px; /* Diâmetro igual ao pai */
+            width: 800px; 
             height: 800px;
-            /* Máscara em forma de arco (usando gradiente radial com transparência) */
             background: conic-gradient(
                 transparent 0deg,
-                rgba(123, 102, 255, 0.8) 0deg, /* Arco forte de 0 graus */
-                rgba(123, 102, 255, 0.2) 10deg, /* Arco suave até 10 graus */
+                rgba(123, 102, 255, 0.8) 0deg, 
+                rgba(123, 102, 255, 0.2) 10deg, 
                 transparent 25deg,
                 transparent 360deg
             );
             border-radius: 50%;
             transform-origin: center center;
-            animation: arc-scan 8s infinite linear; /* Rotação e propagação */
+            animation: arc-scan 8s infinite linear; 
         }
 
         /* 2. Efeito de Glow do Cursor (CUSTOM CURSOR) */
@@ -123,23 +121,23 @@
         }
 
         #cursor-glow {
-            width: 300px; 
-            height: 300px;
+            width: 400px; 
+            height: 400px; 
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(123, 102, 255, 0.15) 0%, rgba(18, 18, 18, 0) 70%);
+            background: radial-gradient(circle, rgba(123, 102, 255, 0.10) 0%, rgba(18, 18, 18, 0) 75%);
             transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background 0.3s, opacity 0.3s;
-            opacity: 0.8;
+            transition: width 0.4s ease-out, height 0.4s ease-out, background 0.4s ease-out, opacity 0.4s ease-out;
+            opacity: 0.6; 
         }
-        
-        /* NOVO: Bolinha para identificar a posição exata */
+
         #cursor-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #7B66FF;
+            width: 16px; 
+            height: 16px;
+            background-color: transparent; 
+            border: 2px solid #7B66FF; 
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            transition: transform 0.1s ease;
+            transition: transform 0.1s ease, opacity 0.3s;
         }
         
         /* 3. Efeito de Glow nos Botões (CTA Glow) */
@@ -170,16 +168,95 @@
             animation: glow-animation 8s ease infinite;
         }
         
-        /* Animação para o fundo do glow (pulsar/movimento) */
         @keyframes glow-animation {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
+        
+        /* Estilo para os passos da metodologia */
+        .process-step {
+            position: relative;
+            padding: 20px;
+            background-color: #242424;
+            border-radius: 10px;
+            text-align: left;
+            border-left: 3px solid transparent;
+            transition: border-left-color 0.3s, background-color 0.3s;
+        }
+        .process-step:hover {
+            border-left-color: #7B66FF;
+            background-color: #1A1A1A;
+        }
+        .process-step::before {
+            content: attr(data-step);
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            font-weight: 800;
+            color: rgba(123, 102, 255, 0.1);
+            line-height: 1;
+        }
+
+        /* --- Estilos do Carrossel de Texto (Loop Infinito) --- */
+        .scrolling-text-container {
+            width: 100%;
+            max-width: 800px; 
+            margin: 0 auto;
+            overflow: hidden;
+            height: 4rem; 
+            line-height: 4rem;
+            mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0) 100%);
+        }
+        
+        /* CORREÇÃO CRÍTICA 1: Usar width: fit-content para que a largura seja medida corretamente */
+        .scrolling-text-track {
+            display: flex;
+            white-space: nowrap; 
+            width: fit-content; 
+            pointer-events: none; 
+            will-change: transform; 
+        }
+        
+        /* Estrutura de conteúdo para espaçamento uniforme */
+        .scrolling-text-group {
+            display: flex;
+            align-items: center;
+            padding-right: 0; 
+            /* CORREÇÃO CRÍTICA 2: Adicionar uma margem final a ESTE grupo, de forma que o conteúdo
+               não se encoste e a transição do loop seja perfeita. */
+            margin-right: 0; 
+        }
+        
+        .scrolling-text-item {
+            font-size: 1.25rem; 
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            color: #555; 
+            transition: color 0.3s;
+            text-transform: uppercase;
+            padding: 0 1.5rem; 
+        }
+
+        .scrolling-text-item span:hover {
+            color: #7B66FF; 
+        }
+
+        .service-divider {
+            color: #444; 
+            font-weight: 900;
+            font-size: 1.5rem; 
+            line-height: 1;
+            margin: 0 -1rem; 
+            display: inline-block;
+        }
+
+        /* A animação keyframes "scroll-text" será removida/ignorada, pois será gerida por JS */
     </style>
 </head>
 
-<body class="antialiased">
+<body class="antialiased bg-primary-dark text-light-text">
     <!-- Cursor Personalizado: DOT e GLOW -->
     <div id="cursor-glow"></div> 
     <div id="cursor-dot"></div> 
@@ -195,13 +272,15 @@
             <!-- Links de Navegação (Desktop) -->
             <nav class="hidden md:flex space-x-8 font-semibold">
                 <a href="#services" class="text-light-text hover:text-accent-color transition duration-300 cursor-none">Serviços</a>
+                <a href="#metodologia" class="text-light-text hover:text-accent-color transition duration-300 cursor-none">Metodologia</a>
+                <a href="#tech" class="text-light-text hover:text-accent-color transition duration-300 cursor-none">Tecnologias</a>
                 <a href="#portfolio" class="text-light-text hover:text-accent-color transition duration-300 cursor-none">Portfólio</a>
+                <a href="#insights" class="text-light-text hover:text-accent-color transition duration-300 cursor-none">Insights</a>
                 <a href="#about" class="text-light-text hover:text-accent-color transition duration-300 cursor-none">Sobre</a>
             </nav>
 
             <!-- CTA (Glow Button) -->
             <a href="#contact" class="hidden md:block bg-accent-color hover:bg-indigo-600 text-white font-bold py-2.5 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105 cta-glow-effect cursor-none">
-                <!-- Conteúdo envolvido em span para ficar por cima do glow -->
                 <span>Iniciar Projeto</span>
             </a>
 
@@ -215,7 +294,10 @@
         <div id="mobile-menu" class="hidden md:hidden bg-primary-dark/95">
             <nav class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
                 <a href="#services" class="block py-2 text-light-text hover:text-accent-color transition duration-300 cursor-none">Serviços</a>
+                <a href="#metodologia" class="block py-2 text-light-text hover:text-accent-color transition duration-300 cursor-none">Metodologia</a>
+                <a href="#tech" class="block py-2 text-light-text hover:text-accent-color transition duration-300 cursor-none">Tecnologias</a>
                 <a href="#portfolio" class="block py-2 text-light-text hover:text-accent-color transition duration-300 cursor-none">Portfólio</a>
+                <a href="#insights" class="block py-2 text-light-text hover:text-accent-color transition duration-300 cursor-none">Insights</a>
                 <a href="#about" class="block py-2 text-light-text hover:text-accent-color transition duration-300 cursor-none">Sobre</a>
                 <a href="#contact" class="block py-2 text-accent-color font-bold cursor-none">Iniciar Projeto</a>
             </nav>
@@ -223,7 +305,8 @@
     </header>
 
     <!-- 2. Secção HERO (Destaque) -->
-    <section class="relative min-h-[85vh] flex items-center justify-center text-center px-4 py-20 overflow-hidden">
+    <section class="relative min-h-[85vh] flex items-center justify-center text-center px-4 py-20 overflow-hidden bg-primary-dark">
+        
         <!-- NOVO: Animação de Arco de Radar -->
         <div id="radar-bg">
             <div id="radar-arc"></div>
@@ -246,10 +329,36 @@
                 </a>
             </div>
 
-            <!-- Placeholder para o Carrossel/Slider de Logotipos/Projetos -->
-            <div class="bg-card-bg w-full h-24 sm:h-32 rounded-xl flex items-center justify-center text-subtle-text italic border border-gray-700 shadow-2xl">
-                [Placeholder: Carrossel de Logotipos de Clientes ou Destaques de Projetos]
+            <!-- Carrossel de Texto Contínuo -->
+            <div class="scrolling-text-container bg-card-bg rounded-xl border border-gray-700 shadow-2xl overflow-hidden">
+                <div class="scrolling-text-track" id="scrolling-text-track">
+                    <!-- Grupo de Conteúdo Original -->
+                    <!-- Adicionado 'scroll-group-content' para medição precisa no JS -->
+                    <div class="scrolling-text-group scroll-group-content" id="scroll-group-1">
+                        <span class="scrolling-text-item">DESIGN PARA SOCIAL MEDIA</span>
+                        <span class="service-divider">|</span>
+                        <span class="scrolling-text-item">MODELAGEM 3D</span>
+                        <span class="service-divider">|</span>
+                        <span class="scrolling-text-item">REALIDADE AUMENTADA (AR)</span>
+                        <span class="service-divider">|</span>
+                        <span class="scrolling-text-item">ANIMAÇÃO MOTION GRAPHICS</span>
+                        <span class="service-divider">|</span>
+                    </div>
+                    <!-- Grupo de Conteúdo Duplicado (para loop perfeito) -->
+                    <div class="scrolling-text-group scroll-group-content" id="scroll-group-2">
+                        <span class="scrolling-text-item">DESIGN PARA SOCIAL MEDIA</span>
+                        <span class="service-divider">|</span>
+                        <span class="scrolling-text-item">MODELAGEM 3D</span>
+                        <span class="service-divider">|</span>
+                        <span class="scrolling-text-item">REALIDADE AUMENTADA (AR)</span>
+                        <span class="service-divider">|</span>
+                        <span class="scrolling-text-item">ANIMAÇÃO MOTION GRAPHICS</span>
+                        <span class="service-divider">|</span>
+                    </div>
+                </div>
             </div>
+            <!-- FIM: Carrossel de Texto Contínuo -->
+
         </div>
     </section>
 
@@ -293,7 +402,84 @@
         </div>
     </section>
 
-    <!-- 4. Secção de PORTFÓLIO (Layout de Blocos) -->
+    <!-- NOVO 4. Secção: Metodologia (Processo) -->
+    <section id="metodologia" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-4xl font-extrabold mb-4">A Nossa <span class="text-accent-color">Metodologia</span>.</h2>
+            <p class="text-lg text-subtle-text mb-16 max-w-3xl mx-auto">Um processo ágil e focado em resultados, garantindo excelência desde a estratégia até à entrega final.</p>
+
+            <div class="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <div class="process-step" data-step="01">
+                    <h3 class="text-xl font-bold mb-2">Estratégia</h3>
+                    <p class="text-subtle-text">Análise aprofundada das suas necessidades e público-alvo para definir a visão.</p>
+                </div>
+                <div class="process-step" data-step="02">
+                    <h3 class="text-xl font-bold mb-2">Design & Protótipo</h3>
+                    <p class="text-subtle-text">Criação de mockups 2D/3D e protótipos interativos para validação.</p>
+                </div>
+                <div class="process-step" data-step="03">
+                    <h3 class="text-xl font-bold mb-2">Desenvolvimento</h3>
+                    <p class="text-subtle-text">Implementação técnica (Modelagem 3D, AR Scripting, Produção de Conteúdo).</p>
+                </div>
+                <div class="process-step" data-step="04">
+                    <h3 class="text-xl font-bold mb-2">Lançamento & Otimização</h3>
+                    <p class="text-subtle-text">Publicação nas plataformas e acompanhamento para otimização de performance.</p>
+                </div>
+            </div>
+
+            <!-- Aplicado o estilo cta-glow-effect para o botão da Metodologia -->
+            <a href="#contact" class="inline-block mt-10 bg-accent-color hover:bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105 cta-glow-effect cursor-none">
+                <span>Conhecer o Processo Detalhado</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- NOVO 5. Secção: Tecnologias (Tech Stack) -->
+    <section id="tech" class="py-20 bg-card-bg/50 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-4xl font-extrabold mb-4">As Nossas <span class="text-accent-color">Tecnologias</span>.</h2>
+            <p class="text-lg text-subtle-text mb-16 max-w-3xl mx-auto">Utilizamos as ferramentas mais avançadas da indústria para garantir resultados de ponta e compatibilidade.</p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
+                <!-- Ícone 1: Blender (3D) -->
+                <div class="p-4 bg-card-bg rounded-lg flex flex-col items-center shadow-lg hover:shadow-accent-color/20 transition duration-300 transform hover:scale-105">
+                    <i class="icon" data-lucide="mouse-pointer-2"></i>
+                    <span class="mt-2 text-sm font-semibold">Blender / Cinema 4D</span>
+                </div>
+                <!-- Ícone 2: Spark AR -->
+                <div class="p-4 bg-card-bg rounded-lg flex flex-col items-center shadow-lg hover:shadow-accent-color/20 transition duration-300 transform hover:scale-105">
+                    <i class="icon" data-lucide="eye"></i>
+                    <span class="mt-2 text-sm font-semibold">Spark AR / Lens Studio</span>
+                </div>
+                <!-- Ícone 3: Adobe CC -->
+                <div class="p-4 bg-card-bg rounded-lg flex flex-col items-center shadow-lg hover:shadow-accent-color/20 transition duration-300 transform hover:scale-105">
+                    <i class="icon" data-lucide="layout-grid"></i>
+                    <span class="mt-2 text-sm font-semibold">Adobe Creative Cloud</span>
+                </div>
+                <!-- Ícone 4: Three.js (Web 3D) -->
+                <div class="p-4 bg-card-bg rounded-lg flex flex-col items-center shadow-lg hover:shadow-accent-color/20 transition duration-300 transform hover:scale-105">
+                    <i class="icon" data-lucide="globe-2"></i>
+                    <span class="mt-2 text-sm font-semibold">Three.js / WebGL</span>
+                </div>
+                <!-- Ícone 5: Figma -->
+                <div class="p-4 bg-card-bg rounded-lg flex flex-col items-center shadow-lg hover:shadow-accent-color/20 transition duration-300 transform hover:scale-105">
+                    <i class="icon" data-lucide="code"></i>
+                    <span class="mt-2 text-sm font-semibold">Figma / Miro</span>
+                </div>
+                <!-- Ícone 6: Unreal/Unity -->
+                <div class="p-4 bg-card-bg rounded-lg flex flex-col items-center shadow-lg hover:shadow-accent-color/20 transition duration-300 transform hover:scale-105">
+                    <i class="icon" data-lucide="gamepad"></i>
+                    <span class="mt-2 text-sm font-semibold">Unity / Unreal Engine</span>
+                </div>
+            </div>
+
+            <a href="#portfolio" class="inline-block mt-10 bg-accent-color hover:bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105 cta-glow-effect cursor-none">
+                <span>Ver Aplicações Práticas</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Secção 4 (Antiga): PORTFÓLIO (Layout de Blocos) -->
     <section id="portfolio" class="py-20 px-4">
         <div class="max-w-7xl mx-auto text-center">
             <h2 class="text-4xl font-extrabold mb-4">Portfólio em <span class="text-accent-color">Destaque</span>.</h2>
@@ -327,8 +513,44 @@
         </div>
     </section>
     
-    <!-- 5. Secção SOBRE/CONTACTO -->
-    <section id="about" class="py-20 bg-card-bg/50 px-4">
+    <!-- NOVO 6. Secção: Insights (Blog) -->
+    <section id="insights" class="py-20 bg-card-bg/50 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-4xl font-extrabold mb-4">Insights & <span class="text-accent-color">Tendências</span>.</h2>
+            <p class="text-lg text-subtle-text mb-16 max-w-3xl mx-auto">Conteúdo de valor para o seu negócio: as últimas novidades em 3D, AR e estratégias digitais.</p>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Artigo 1 -->
+                <div class="p-6 bg-card-bg rounded-xl shadow-2xl text-left hover:border-accent-color/50 border border-transparent transition duration-300 transform hover:-translate-y-1">
+                    <p class="text-sm text-accent-color font-semibold mb-2">3D & Web</p>
+                    <h4 class="text-xl font-bold mb-3">O Futuro do E-commerce com Visualizações 3D.</h4>
+                    <p class="text-subtle-text text-sm">Como os modelos 3D interativos estão a aumentar as conversões de venda.</p>
+                    <a href="#contact" class="text-accent-color mt-3 block text-sm font-semibold hover:text-white cursor-none">Ler Artigo &rarr;</a>
+                </div>
+                <!-- Artigo 2 -->
+                <div class="p-6 bg-card-bg rounded-xl shadow-2xl text-left hover:border-accent-color/50 border border-transparent transition duration-300 transform hover:-translate-y-1">
+                    <p class="text-sm text-accent-color font-semibold mb-2">Social Media</p>
+                    <h4 class="text-xl font-bold mb-3">5 Estratégias para Engajamento Máximo no TikTok.</h4>
+                    <p class="text-subtle-text text-sm">Dicas práticas para criar vídeos virais e campanhas de sucesso.</p>
+                    <a href="#contact" class="text-accent-color mt-3 block text-sm font-semibold hover:text-white cursor-none">Ler Artigo &rarr;</a>
+                </div>
+                <!-- Artigo 3 -->
+                <div class="p-6 bg-card-bg rounded-xl shadow-2xl text-left hover:border-accent-color/50 border border-transparent transition duration-300 transform hover:-translate-y-1">
+                    <p class="text-sm text-accent-color font-semibold mb-2">AR</p>
+                    <h4 class="text-xl font-bold mb-3">Criar o seu Primeiro Filtro de Realidade Aumentada.</h4>
+                    <p class="text-subtle-text text-sm">Um guia passo-a-passo para iniciantes na criação de filtros.</p>
+                    <a href="#contact" class="text-accent-color mt-3 block text-sm font-semibold hover:text-white cursor-none">Ler Artigo &rarr;</a>
+                </div>
+            </div>
+
+            <a href="#" class="inline-block mt-10 bg-accent-color hover:bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105 cta-glow-effect cursor-none">
+                <span>Ver Todos os Insights</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Secção 7 (Antiga 5): SOBRE/CONTACTO -->
+    <section id="about" class="py-20 px-4 bg-primary-dark">
         <div class="max-w-7xl mx-auto text-center">
             <h2 class="text-4xl font-extrabold mb-4">A Nossa <span class="text-accent-color">Filosofia</span>.</h2>
             <p class="text-lg text-subtle-text mb-16 max-w-3xl mx-auto">
@@ -363,8 +585,8 @@
         </div>
     </section>
 
-    <!-- 6. Rodapé -->
-    <footer class="py-10 border-t border-gray-800 px-4">
+    <!-- 8. Rodapé -->
+    <footer class="py-10 border-t border-gray-800 px-4 bg-primary-dark">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-subtle-text text-sm space-y-4 md:space-y-0">
             <p>&copy; 2025 Studio Design. Todos os direitos reservados.</p>
             <div class="flex space-x-6">
@@ -420,9 +642,9 @@
         }, observerOptions);
 
         // Adiciona classes para a animação inicial (elementos ocultos e deslocados)
-        document.querySelectorAll('.portfolio-item, .grid > div:not(.portfolio-item)').forEach(el => {
-            // Excluímos a Hero e usamos apenas para serviços e portfólio
-            if (el.closest('#services') || el.closest('#portfolio')) {
+        document.querySelectorAll('.portfolio-item, .grid > div:not(.portfolio-item), .process-step').forEach(el => {
+            // Inclui as novas classes 'process-step' e todos os divs dentro de grids (serviços, tecnologias, insights)
+            if (el.closest('#services') || el.closest('#portfolio') || el.closest('#metodologia') || el.closest('#tech') || el.closest('#insights')) {
                 el.classList.add('transition', 'duration-1000', 'ease-out', 'opacity-0', 'translate-y-8');
                 observer.observe(el);
             }
@@ -431,35 +653,79 @@
         // 4. Custom Cursor Glow Follower
         const cursorGlow = document.getElementById('cursor-glow');
         const cursorDot = document.getElementById('cursor-dot');
-        const defaultGlowStyle = 'radial-gradient(circle, rgba(123, 102, 255, 0.15) 0%, rgba(18, 18, 18, 0) 70%)';
+        const defaultGlowStyle = 'radial-gradient(circle, rgba(123, 102, 255, 0.10) 0%, rgba(18, 18, 18, 0) 75%)';
         const hoverGlowStyle = 'radial-gradient(circle, rgba(123, 102, 255, 0.25) 0%, rgba(18, 18, 18, 0) 70%)';
 
         document.addEventListener('mousemove', (e) => {
-            // Move o elemento do glow e o dot para a posição do cursor.
             if (cursorGlow) {
                 cursorGlow.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
             }
             if (cursorDot) {
-                // Move o dot para a posição exata (não precisa de 50% de offset porque já está no centro)
                 cursorDot.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
             }
         });
 
-        // Efeito de aumentar o glow nos elementos interativos
-        document.querySelectorAll('a, button, .portfolio-item').forEach(el => {
-            // Garante que o efeito de cursor é aplicado apenas a elementos interativos
+        document.querySelectorAll('a, button, .portfolio-item, .process-step, .insights-card').forEach(el => {
             el.addEventListener('mouseenter', () => {
-                cursorGlow.style.width = '350px';
-                cursorGlow.style.height = '350px';
+                cursorGlow.style.width = '450px'; 
+                cursorGlow.style.height = '450px';
                 cursorGlow.style.background = hoverGlowStyle;
-                cursorDot.style.opacity = 0; // Esconde o dot quando está por cima de algo (dá destaque ao glow)
+                cursorDot.style.opacity = 0; 
             });
             el.addEventListener('mouseleave', () => {
-                cursorGlow.style.width = '300px';
-                cursorGlow.style.height = '300px';
+                cursorGlow.style.width = '400px'; 
+                cursorGlow.style.height = '400px';
                 cursorGlow.style.background = defaultGlowStyle;
                 cursorDot.style.opacity = 1; 
             });
+        });
+
+        // 5. CORREÇÃO CRÍTICA: Carrossel de Texto em Loop Perfeito via JavaScript
+        const track = document.getElementById('scrolling-text-track');
+        // Usa a classe para medir um único grupo
+        const groupContent = document.querySelector('.scroll-group-content'); 
+        const scrollSpeed = 0.5; // Velocidade de scroll em pixels por frame 
+        let animationFrameId;
+
+        function startScrollAnimation() {
+            // A largura a medir é a largura de um dos grupos (groupContent)
+            // Usamos scrollWidth para obter a largura total do conteúdo (mesmo que overflow esconda)
+            const groupWidth = groupContent.scrollWidth; 
+            let currentX = 0;
+
+            function scrollLoop() {
+                // Move o conteúdo para a esquerda
+                currentX -= scrollSpeed;
+
+                // Quando o conteúdo tiver movido a largura exata de um grupo (o loop), reinicia a posição
+                if (currentX <= -groupWidth) {
+                    currentX = 0; // Reinicia a zero para o loop perfeito
+                }
+
+                // Aplica a translação
+                track.style.transform = `translateX(${currentX}px)`;
+
+                animationFrameId = requestAnimationFrame(scrollLoop);
+            }
+            
+            // Verifica se o scroll já está em loop
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            requestAnimationFrame(scrollLoop);
+        }
+        
+        // Chamada inicial e assegurar o recálculo após o carregamento da página
+        window.addEventListener('load', () => {
+            // O timeout garante que o browser renderizou o layout e calculou a largura correta
+            // Usamos um pequeno atraso para garantir que a medição é precisa
+            setTimeout(startScrollAnimation, 100); 
+        });
+
+        // Opcional: Recalcular a animação no resize
+        window.addEventListener('resize', () => {
+            // Recalcula e reinicia a animação no resize para manter a precisão
+            setTimeout(startScrollAnimation, 100); 
         });
 
     </script>
