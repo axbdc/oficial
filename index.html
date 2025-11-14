@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Design: Social Media, 3D & AR</title>
+    <!-- Carrega Tailwind CSS para styling moderno e responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carrega Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Configuração do Tailwind (Personalização do tema) */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#121212', /* Fundo principal escuro */
+                        'accent-color': '#7B66FF', /* Roxo/Azul Vibrante */
+                        'light-text': '#F0F0F0',
+                        'subtle-text': '#A0A0A0',
+                        'card-bg': '#1E1E1E',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+
+        /* Estilos base e classes específicas */
+        body {
+            background-color: #121212;
+            color: #F0F0F0;
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            cursor: none; /* Esconde o cursor padrão para usar o cursor personalizado */
+        }
+
+        /* Classes para layout de blocos de portfólio */
+        .portfolio-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #242424;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: none;
+            min-height: 250px;
+        }
+        .portfolio-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(123, 102, 255, 0.25); /* Sombra mais forte */
+        }
+        .portfolio-large {
+            grid-column: span 2;
+            min-height: 400px;
+        }
+
+        /* Estilo para ícones */
+        .icon {
+            stroke: #7B66FF;
+            width: 3rem;
+            height: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* --- ANIMAÇÕES E EFEITOS ESPECIAIS --- */
+        
+        /* 1. Nova Animação de Radar (Arco Propagador) */
+        @keyframes arc-scan {
+            0% { transform: rotate(0deg); opacity: 0.1; }
+            50% { opacity: 1; }
+            100% { transform: rotate(360deg); opacity: 0.1; }
+        }
+
+        #radar-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 800px; 
+            height: 800px;
+            border-radius: 50%;
+            /* Círculo base para a animação */
+            border: 1px solid rgba(123, 102, 255, 0.2); 
+            transform: translate(-50%, -50%);
+            z-index: -1; 
+            overflow: hidden;
+            pointer-events: none;
+            box-shadow: 0 0 50px rgba(123, 102, 255, 0.1);
+        }
+
+        #radar-arc {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 800px; /* Diâmetro igual ao pai */
+            height: 800px;
+            /* Máscara em forma de arco (usando gradiente radial com transparência) */
+            background: conic-gradient(
+                transparent 0deg,
+                rgba(123, 102, 255, 0.8) 0deg, /* Arco forte de 0 graus */
+                rgba(123, 102, 255, 0.2) 10deg, /* Arco suave até 10 graus */
+                transparent 25deg,
+                transparent 360deg
+            );
+            border-radius: 50%;
+            transform-origin: center center;
+            animation: arc-scan 8s infinite linear; /* Rotação e propagação */
+        }
+
+        /* 2. Efeito de Glow do Cursor (CUSTOM CURSOR) */
+        #cursor-glow, #cursor-dot {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            will-change: transform;
+        }
+
+        #cursor-glow {
+            width: 300px; 
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(123, 102, 255, 0.15) 0%, rgba(18, 18, 18, 0) 70%);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background 0.3s, opacity 0.3s;
+            opacity: 0.8;
+        }
+        
+        /* NOVO: Bolinha para identificar a posição exata */
+        #cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #7B66FF;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease;
+        }
+        
+        /* 3. Efeito de Glow nos Botões (CTA Glow) */
+        .cta-glow-effect {
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+        }
+        
+        .cta-glow-effect::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: linear-gradient(45deg, #7B66FF, #6a53e6, #7B66FF, #6a53e6);
+            background-size: 400% 400%;
+            z-index: -1;
+            filter: blur(12px); 
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            border-radius: 50px;
+        }
+
+        .cta-glow-effect:hover::before {
+            opacity: 0.7;
+            animation: glow-animation 8s ease infinite;
+        }
+        
+        /* Animação para o fundo do glow (pulsar/movimento) */
+        @keyframes glow-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+    <!-- Cursor Personalizado: DOT e GLOW -->
+    <div id="cursor-glow"></div> 
+    <div id="cursor-dot"></div> 
+
+    <!-- 1. Header Fixo e Navegação -->
+    <header class="sticky top-0 z-50 bg-primary-dark/95 backdrop-blur-sm shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center py-5">
+            <!-- Logo -->
+            <a href="#" class="text-2xl font-extrabold tracking-tight text-white hover:text-accent-color transition duration-300 cursor-none">
+                Studio Design <span class="text-accent-color">.</span>
+            </a>
+
+            <!-- Links de Navegação (Desktop) -->
+            <nav class="hidden md:flex space-x-8 font-semibold">
+                <a href="#services" class="text-light-text hover:text-accent-color transition duration-300 cursor-none">Serviços</a>
+                <a href="#portfolio" class="text-light-text hover:text-accent-color transition duration-300 cursor-none">Portfólio</a>
+                <a href="#about" class="text-light-text hover:text-accent-color transition duration-300 cursor-none">Sobre</a>
+            </nav>
+
+            <!-- CTA (Glow Button) -->
+            <a href="#contact" class="hidden md:block bg-accent-color hover:bg-indigo-600 text-white font-bold py-2.5 px-6 rounded-full shadow-lg transition duration-300 transform hover:scale-105 cta-glow-effect cursor-none">
+                <!-- Conteúdo envolvido em span para ficar por cima do glow -->
+                <span>Iniciar Projeto</span>
+            </a>
+
+            <!-- Menu Toggle (Mobile) -->
+            <button id="menu-button" class="md:hidden text-white focus:outline-none cursor-none">
+                <svg id="menu-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+
+        <!-- Menu Mobile (oculto por defeito) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-primary-dark/95">
+            <nav class="px-2 pt-2 pb-3 space-y-1 sm:px-3 flex flex-col items-center">
+                <a href="#services" class="block py-2 text-light-text hover:text-accent-color transition duration-300 cursor-none">Serviços</a>
+                <a href="#portfolio" class="block py-2 text-light-text hover:text-accent-color transition duration-300 cursor-none">Portfólio</a>
+                <a href="#about" class="block py-2 text-light-text hover:text-accent-color transition duration-300 cursor-none">Sobre</a>
+                <a href="#contact" class="block py-2 text-accent-color font-bold cursor-none">Iniciar Projeto</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 2. Secção HERO (Destaque) -->
+    <section class="relative min-h-[85vh] flex items-center justify-center text-center px-4 py-20 overflow-hidden">
+        <!-- NOVO: Animação de Arco de Radar -->
+        <div id="radar-bg">
+            <div id="radar-arc"></div>
+        </div>
+
+        <div class="max-w-4xl mx-auto relative z-10">
+            <h1 class="text-5xl sm:text-7xl font-extrabold leading-tight mb-6">
+                Criamos <span class="text-accent-color">Experiências Visuais</span> que Definem o Futuro.
+            </h1>
+            <p class="text-xl text-subtle-text mb-12 max-w-2xl mx-auto">
+                Design para <span class="text-white font-semibold">Social Media</span>, <span class="text-white font-semibold">3D</span> e <span class="text-white font-semibold">Realidade Aumentada (AR)</span> que eleva a sua marca.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-20">
+                <!-- CTA Primário (Glow Button) -->
+                <a href="#services" class="bg-accent-color hover:bg-indigo-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition duration-300 transform hover:scale-105 cta-glow-effect cursor-none">
+                    <span>Ver Serviços</span>
+                </a>
+                <a href="#portfolio" class="bg-transparent border-2 border-subtle-text text-light-text hover:border-accent-color hover:text-accent-color font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 cursor-none">
+                    Portfólio Recente
+                </a>
+            </div>
+
+            <!-- Placeholder para o Carrossel/Slider de Logotipos/Projetos -->
+            <div class="bg-card-bg w-full h-24 sm:h-32 rounded-xl flex items-center justify-center text-subtle-text italic border border-gray-700 shadow-2xl">
+                [Placeholder: Carrossel de Logotipos de Clientes ou Destaques de Projetos]
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Secção de SERVIÇOS -->
+    <section id="services" class="py-20 bg-card-bg/50 border-t border-b border-gray-800 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-4xl font-extrabold mb-4">Serviços de <span class="text-accent-color">Próxima Geração</span>.</h2>
+            <p class="text-lg text-subtle-text mb-16 max-w-3xl mx-auto">Oferecemos soluções visuais inovadoras que garantem impacto e relevância no mercado digital.</p>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Cartão 1: Social Media Design -->
+                <div class="p-8 bg-card-bg rounded-xl shadow-2xl border border-gray-700 hover:border-accent-color transition duration-300 text-left">
+                    <i class="icon" data-lucide="instagram"></i>
+                    <h3 class="text-2xl font-bold mb-3">Social Media Design</h3>
+                    <p class="text-subtle-text mb-4">
+                        Conteúdo cativante e estratégico para Instagram, TikTok, LinkedIn e mais. Do conceito à publicação.
+                    </p>
+                    <a href="#contact" class="text-accent-color font-semibold hover:text-white cursor-none">Saber Mais &rarr;</a>
+                </div>
+
+                <!-- Cartão 2: 3D Modeling & Animation -->
+                <div class="p-8 bg-card-bg rounded-xl shadow-2xl border border-gray-700 hover:border-accent-color transition duration-300 text-left">
+                    <i class="icon" data-lucide="cube"></i>
+                    <h3 class="text-2xl font-bold mb-3">Modelagem & Animação 3D</h3>
+                    <p class="text-subtle-text mb-4">
+                        Visualizações de produto hiper-realistas, animações cinematográficas e assets 3D otimizados.
+                    </p>
+                    <a href="#contact" class="text-accent-color font-semibold hover:text-white cursor-none">Saber Mais &rarr;</a>
+                </div>
+
+                <!-- Cartão 3: Realidade Aumentada (AR) -->
+                <div class="p-8 bg-card-bg rounded-xl shadow-2xl border border-gray-700 hover:border-accent-color transition duration-300 text-left">
+                    <i class="icon" data-lucide="sparkles"></i>
+                    <h3 class="text-2xl font-bold mb-3">Realidade Aumentada (AR)</h3>
+                    <p class="text-subtle-text mb-4">
+                        Filtros de Instagram/Snapchat, experiências AR para e-commerce e soluções interativas imersivas.
+                    </p>
+                    <a href="#contact" class="text-accent-color font-semibold hover:text-white cursor-none">Saber Mais &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Secção de PORTFÓLIO (Layout de Blocos) -->
+    <section id="portfolio" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-4xl font-extrabold mb-4">Portfólio em <span class="text-accent-color">Destaque</span>.</h2>
+            <p class="text-lg text-subtle-text mb-16 max-w-3xl mx-auto">Uma amostra do nosso trabalho recente, focada em inovação e resultados.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
+                <!-- Os itens do portfólio já têm a classe portfolio-item com animação -->
+                <div class="portfolio-item portfolio-large md:col-span-2 bg-gradient-to-br from-accent-color/80 to-indigo-800/80">
+                    <p class="text-2xl font-bold">Projecto AR Imersivo</p>
+                </div>
+                <div class="portfolio-item">
+                    <p class="font-semibold text-lg">Design Social Media</p>
+                </div>
+                <div class="portfolio-item">
+                    <p class="font-semibold text-lg">Render Produto 3D</p>
+                </div>
+                <div class="portfolio-item portfolio-large md:col-span-2">
+                    <p class="text-2xl font-bold">Branding & Identidade</p>
+                </div>
+                <div class="portfolio-item">
+                    <p class="font-semibold text-lg">Filtro Snapchat</p>
+                </div>
+                <div class="portfolio-item">
+                    <p class="font-semibold text-lg">Animação Loop</p>
+                </div>
+            </div>
+
+            <a href="#" class="inline-block mt-10 bg-transparent border-2 border-accent-color text-accent-color hover:bg-accent-color hover:text-white font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-105 cursor-none">
+                Explorar Todo o Portfólio
+            </a>
+        </div>
+    </section>
+    
+    <!-- 5. Secção SOBRE/CONTACTO -->
+    <section id="about" class="py-20 bg-card-bg/50 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-4xl font-extrabold mb-4">A Nossa <span class="text-accent-color">Filosofia</span>.</h2>
+            <p class="text-lg text-subtle-text mb-16 max-w-3xl mx-auto">
+                Somos um estúdio focado em design inovador. A nossa equipa combina arte e tecnologia para produzir resultados que transcendem o habitual e geram retorno.
+            </p>
+            
+            <div class="grid md:grid-cols-2 gap-12 text-left max-w-5xl mx-auto">
+                <div>
+                    <h3 class="text-3xl font-bold mb-4">Inovação e Tecnologia</h3>
+                    <p class="text-subtle-text">Estamos sempre um passo à frente nas tecnologias de visualização 3D e Realidade Aumentada para dar aos nossos clientes uma vantagem competitiva.</p>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-bold mb-4">Foco no Impacto</h3>
+                    <p class="text-subtle-text">Cada peça de design é criada com um objetivo claro: maximizar o envolvimento, a conversão e a presença da sua marca no digital.</p>
+                </div>
+            </div>
+
+            <div id="contact" class="mt-20 p-10 bg-accent-color/20 rounded-xl max-w-3xl mx-auto shadow-2xl">
+                <h3 class="text-3xl font-bold mb-4 text-white">Pronto para Começar?</h3>
+                <p class="text-subtle-text mb-6">Fale connosco hoje e descubra como o design pode transformar o seu negócio.</p>
+                <!-- Formulário de Contacto Simples Placeholder -->
+                <form class="space-y-4">
+                    <input type="email" placeholder="O seu Email..." required class="w-full p-3 rounded-lg bg-card-bg border border-gray-700 text-light-text focus:border-accent-color focus:ring-accent-color focus:ring-2">
+                    <textarea placeholder="O que pretende?" required rows="3" class="w-full p-3 rounded-lg bg-card-bg border border-gray-700 text-light-text focus:border-accent-color focus:ring-accent-color focus:ring-2"></textarea>
+                    <!-- Botão de Envio (Glow Button) -->
+                    <button type="submit" class="w-full bg-accent-color hover:bg-indigo-600 text-white font-bold py-3 rounded-full transition duration-300 transform hover:scale-[1.01] cta-glow-effect cursor-none">
+                        <span>Enviar Pedido</span>
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 6. Rodapé -->
+    <footer class="py-10 border-t border-gray-800 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-subtle-text text-sm space-y-4 md:space-y-0">
+            <p>&copy; 2025 Studio Design. Todos os direitos reservados.</p>
+            <div class="flex space-x-6">
+                <a href="#" class="hover:text-accent-color transition duration-300 cursor-none">Privacidade</a>
+                <a href="#" class="hover:text-accent-color transition duration-300 cursor-none">Termos</a>
+                <a href="#" class="hover:text-accent-color transition duration-300 cursor-none">Instagram</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript para Funcionalidades -->
+    <script>
+        // Inicializa os ícones do Lucide
+        lucide.createIcons();
+
+        // 1. Funcionalidade do Menu Mobile
+        document.getElementById('menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuIcon = document.getElementById('menu-icon');
+            
+            mobileMenu.classList.toggle('hidden');
+
+            // Troca o ícone do menu (Burger para X)
+            if (mobileMenu.classList.contains('hidden')) {
+                menuIcon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+            } else {
+                menuIcon.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+            }
+        });
+        
+        // 2. Fechar Menu Mobile ao clicar num link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobile-menu').classList.add('hidden');
+                document.getElementById('menu-icon').setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+            });
+        });
+
+        // 3. Efeito de Animação de Scroll (Fade Up)
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Adiciona classes para a animação inicial (elementos ocultos e deslocados)
+        document.querySelectorAll('.portfolio-item, .grid > div:not(.portfolio-item)').forEach(el => {
+            // Excluímos a Hero e usamos apenas para serviços e portfólio
+            if (el.closest('#services') || el.closest('#portfolio')) {
+                el.classList.add('transition', 'duration-1000', 'ease-out', 'opacity-0', 'translate-y-8');
+                observer.observe(el);
+            }
+        });
+        
+        // 4. Custom Cursor Glow Follower
+        const cursorGlow = document.getElementById('cursor-glow');
+        const cursorDot = document.getElementById('cursor-dot');
+        const defaultGlowStyle = 'radial-gradient(circle, rgba(123, 102, 255, 0.15) 0%, rgba(18, 18, 18, 0) 70%)';
+        const hoverGlowStyle = 'radial-gradient(circle, rgba(123, 102, 255, 0.25) 0%, rgba(18, 18, 18, 0) 70%)';
+
+        document.addEventListener('mousemove', (e) => {
+            // Move o elemento do glow e o dot para a posição do cursor.
+            if (cursorGlow) {
+                cursorGlow.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+            }
+            if (cursorDot) {
+                // Move o dot para a posição exata (não precisa de 50% de offset porque já está no centro)
+                cursorDot.style.transform = `translate(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%))`;
+            }
+        });
+
+        // Efeito de aumentar o glow nos elementos interativos
+        document.querySelectorAll('a, button, .portfolio-item').forEach(el => {
+            // Garante que o efeito de cursor é aplicado apenas a elementos interativos
+            el.addEventListener('mouseenter', () => {
+                cursorGlow.style.width = '350px';
+                cursorGlow.style.height = '350px';
+                cursorGlow.style.background = hoverGlowStyle;
+                cursorDot.style.opacity = 0; // Esconde o dot quando está por cima de algo (dá destaque ao glow)
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorGlow.style.width = '300px';
+                cursorGlow.style.height = '300px';
+                cursorGlow.style.background = defaultGlowStyle;
+                cursorDot.style.opacity = 1; 
+            });
+        });
+
+    </script>
+</body>
+</html>
