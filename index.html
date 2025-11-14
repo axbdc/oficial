@@ -103,24 +103,6 @@
             transition: all 0.5s ease; /* Adicionado transição para responsividade suave */
         }
 
-        #radar-arc {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 800px; 
-            height: 800px;
-            background: conic-gradient(
-                transparent 0deg,
-                rgba(123, 102, 255, 0.8) 0deg, 
-                rgba(123, 102, 255, 0.2) 10deg, 
-                transparent 25deg,
-                transparent 360deg
-            );
-            border-radius: 50%;
-            transform-origin: center center;
-            animation: arc-scan 8s infinite linear; 
-        }
 
         /* Correção CRÍTICA: Manter o radar no mobile, mas com tamanho REDUZIDO (para caber) */
         @media (max-width: 640px) {
