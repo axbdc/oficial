@@ -91,24 +91,6 @@
             box-shadow: 0 0 50px rgba(123, 102, 255, 0.1);
         }
 
-        #radar-arc {
-            content: '';
-            position: center;
-            top: 0;
-            left: 50%;
-            width: 800px; 
-            height: 800px;
-            background: conic-gradient(
-                transparent 0deg,
-                rgba(123, 102, 255, 0.8) 0deg, 
-                rgba(123, 102, 255, 0.2) 10deg, 
-                transparent 25deg,
-                transparent 360deg
-            );
-            border-radius: 50%;
-            transform-origin: center center;
-            animation: arc-scan 8s infinite linear; 
-        }
 
         /* 2. Efeito de Glow do Cursor (CUSTOM CURSOR) */
         #cursor-glow, #cursor-dot {
@@ -308,6 +290,9 @@
     <section class="relative min-h-[85vh] flex items-center justify-center text-center px-4 py-20 overflow-hidden bg-primary-dark">
         
         <!-- NOVO: Animação de Arco de Radar -->
+        <div id="radar-bg">
+            <div id="radar-arc"></div>
+        </div>
 
         <div class="max-w-4xl mx-auto relative z-10">
             <h1 class="text-5xl sm:text-7xl font-extrabold leading-tight mb-6">
